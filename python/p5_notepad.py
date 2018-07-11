@@ -5,9 +5,9 @@
 '''
 
 from sys import argv
-from PySide.QtGui import (QWidget, QTextEdit, QPushButton, QMainWindow,
-                          QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox,
-                          QApplication)
+from PyQt5.QtWidgets import (QWidget, QTextEdit, QPushButton, QMainWindow,
+                             QVBoxLayout, QHBoxLayout, QFileDialog,
+                             QMessageBox, QApplication)
 
 class Notepad(QWidget):
     def __init__(self, parent=None):
