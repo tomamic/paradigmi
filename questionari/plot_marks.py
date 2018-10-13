@@ -65,7 +65,7 @@ def plot_questions(data: pd.DataFrame, yy: str):
     sns.distplot(marks, label=text, hist=False, kde=True,
                  kde_kws={"shade": True, "linewidth": 3})
 
-def plot_question(quest: int, data: pd.DataFrame, yy: str):
+def plot_question(data: pd.DataFrame, quest: int, yy: str):
     # Subset to the question
     subset = data[data["Question"] == quest]
     studs, marks = subset["Students"], subset["Mark"]
@@ -98,7 +98,7 @@ def main():
         plot_units(units, yy)
         plot_questions(data, yy)
         for quest in range(1, 12):
-            plot_question(quest, data, yy)
+            plot_question(data, quest, yy)
 
     # save figures
     for i in plt.get_fignums():
