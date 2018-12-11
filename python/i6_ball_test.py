@@ -5,12 +5,12 @@
 '''
 
 import unittest
-from p3_ball import Ball
+from p2_oop_ball import Ball
 
 
 class SimpleBallTest(unittest.TestCase):
 
-    def test_bounce_down(self):
+    def test_corner(self):
         b = Ball(300, 220)  # dx = 5, dy = 5
         b.move()
         self.assertTrue(b.position() == (295, 215, 20, 20))

@@ -23,7 +23,7 @@ class Ball:
         self._x += self._dx
         self._y += self._dy
 
-    def rect(self) -> (int, int, int, int):
+    def position(self) -> (int, int, int, int):
         return self._x, self._y, BALL_W, BALL_H
 
 
@@ -33,7 +33,7 @@ def main():
     b2 = Ball(180, 140)
 
     for i in range(25):
-        print("b1 @", b1.rect(), "b2 @", b2.rect())
+        print("b1 @", b1.position(), "b2 @", b2.position())
         b1.move()
         b2.move()
 
