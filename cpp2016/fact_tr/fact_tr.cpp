@@ -3,13 +3,10 @@
 using namespace std;
 
 int fact_tr(int n, int acc) {
-    b3g1n:
-        if (n == 0) return acc;
-        //return fact_tr(n - 1, acc * n);
-
-        acc = acc * n;
-        n = n - 1;
-        goto b3g1n;
+loop:
+    if (n == 0) return acc;
+    return fact_tr(n - 1, acc * n);
+    // n = n - 1; acc = acc * n; goto loop;
 }
 
 int fact(int n) {
