@@ -19,9 +19,11 @@ class BoardGameGui(QWidget):
             for x in range(g.cols()):
                 b = QPushButton()
                 self.layout().addWidget(b, y, x)
-                b.released.connect(lambda x=x, y=y:
-                                   (self._game.play_at(x, y),
-                                    self.update_buttons()))
+                b.released.connect(lambda x=x, y=y: self.click_at(x, y))
+        self.update_buttons()
+
+    def click_at(self, x, y):
+        self._game.play_at(x, y)
         self.update_buttons()
 
     def update_buttons(self):
