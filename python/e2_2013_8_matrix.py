@@ -4,10 +4,13 @@
 @license This software is free - http://www.gnu.org/licenses/gpl.html
 '''
 
+with open("matrix.dat", "w") as new_file:
+    print("AABA\nBAAB\nAABB", file=new_file)
+
 cols = 0
 rows = 0
 matrix = []
-with open('matrix.dat', 'r') as f:
+with open("matrix.dat", "r") as f:
     for line in f:
         row = list(line)
         row.pop()  # remove newline
