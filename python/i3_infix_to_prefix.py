@@ -4,14 +4,14 @@
 @license This software is free - http://www.gnu.org/licenses/gpl.html
 '''
 
-from i2_infix_eval import parse_expr
+from i3_infix_eval import parse_expr
 
 class Actions:
-    def add(self, x, y): return "+ {} {}".format(x, y)
-    def sub(self, x, y): return "- {} {}".format(x, y)
-    def mul(self, x, y): return "* {} {}".format(x, y)
-    def div(self, x, y): return "/ {} {}".format(x, y)
-    def opp(self, x): return "~{}".format(x)
+    def add(self, x, y): return f"+ {x} {y}"
+    def sub(self, x, y): return f"- {x} {y}"
+    def mul(self, x, y): return f"* {x} {y}"
+    def div(self, x, y): return f"/ {x} {y}"
+    def opp(self, x): return f"~{x}"
     def num(self, x): return x
     def var(self, x): return x
 

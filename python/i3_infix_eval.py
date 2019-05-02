@@ -14,44 +14,44 @@ import re
 
 def expr(tok, act):
     x = term(tok, act)
-    next = tok.peek()
-    while next in ('+', '-'):
-        tok.consume(next)
+    nxt = tok.peek()
+    while nxt in ('+', '-'):
+        tok.consume(nxt)
         y = term(tok, act)
-        if next == '+': x = act.add(x, y)
+        if nxt == '+': x = act.add(x, y)
         else: x = act.sub(x, y)
-        next = tok.peek()
+        nxt = tok.peek()
     return x
 
 def term(tok, act):
     x = factor(tok, act)
-    next = tok.peek()
-    while next in ('*', '/'):
-        tok.consume(next)
+    nxt = tok.peek()
+    while nxt in ('*', '/'):
+        tok.consume(nxt)
         y = factor(tok, act)
-        if next == '*': x = act.mul(x, y)
+        if nxt == '*': x = act.mul(x, y)
         else: x = act.div(x, y)
-        next = tok.peek()
+        nxt = tok.peek()
     return x
 
 def factor(tok, act):
-    next = tok.peek()
-    if next == '-':
+    nxt = tok.peek()
+    if nxt == '-':
         tok.consume('-')
         x = factor(tok, act)
         return act.opp(x)
-    elif next == '(':
+    elif nxt == '(':
         tok.consume('(')
         x = expr(tok, act)
         tok.consume(')')
         return x
-    elif next.isalpha():
-        tok.consume(next)
-        x = act.var(next)
+    elif nxt.isalpha():
+        tok.consume(nxt)
+        x = act.var(nxt)
         return x
     else:
-        tok.consume(next)
-        x = act.num(next)
+        tok.consume(nxt)
+        x = act.num(nxt)
         return x
 
 
