@@ -7,7 +7,7 @@
 from i3_infix_eval import parse_expr
 
 class Expression:
-    def print(indent):
+    def print(self, indent):
         raise NotImplementedError('Abstract method')
 
 class BinaryOp(Expression):
