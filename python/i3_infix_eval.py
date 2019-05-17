@@ -23,6 +23,7 @@ def expr(tok, act):
         nxt = tok.peek()
     return x
 
+# term = factor {( '*' | '/' ) factor}
 def term(tok, act):
     x = factor(tok, act)
     nxt = tok.peek()
@@ -34,6 +35,7 @@ def term(tok, act):
         nxt = tok.peek()
     return x
 
+# factor = '-' factor | '(' expr ')' | var | num
 def factor(tok, act):
     nxt = tok.peek()
     if nxt == '-':
