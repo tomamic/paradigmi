@@ -61,7 +61,7 @@ def plot_questions(data: pd.DataFrame, yy: str):
     marks = data["Mark"]
     fig = plt.figure("questions-density")
     avg, std = np.average(marks), np.std(marks)
-    text = f"{yy}:\navg={avg:.2f},\nstd={std:.2f}"        
+    text = f"{yy}:\navg={avg:.2f},\nstd={std:.2f}"
     sns.distplot(marks, label=text, hist=False, kde=True,
                  kde_kws={"shade": True, "linewidth": 3})
 
@@ -72,7 +72,7 @@ def plot_question(data: pd.DataFrame, quest: int, yy: str):
 
     fig = plt.figure(f"questions-density-Q{quest:02}")
     avg, std = np.average(marks), np.std(marks)
-    text = f"{yy}:\navg={avg:.2f},\nstd={std:.2f}"        
+    text = f"{yy}:\navg={avg:.2f},\nstd={std:.2f}"
     sns.distplot(marks, label=text, hist=False, kde=True,
                  kde_kws={"shade": True, "linewidth": 3})
 

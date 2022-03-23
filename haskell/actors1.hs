@@ -20,7 +20,7 @@ moveY (Ball x y dx dy)
     | otherwise                    = Ball x (y - dy) dx (-dy)
 
 move :: Ball -> Ball
-move = moveX . moveY 
+move = moveX . moveY
 
 data BallArena = BallArena { balls :: [Ball]
                            } deriving (Show)
@@ -33,7 +33,7 @@ operateArena a = do
     print a
     line <- getLine
     when (null line) $ operateArena (moveAll a)
-        
+
 main = do
     operateArena (BallArena [Ball 200 100 5 5, Ball 300 200 10 0])
 
