@@ -36,15 +36,15 @@ move = moveX . moveY
 data BasicArena = BasicArena { actors :: [BasicActor]
                              } deriving (Show)
 
-moveAll :: BasicArena -> BasicArena
-moveAll (BasicArena actors) = BasicArena (map move actors)
+tick :: BasicArena -> BasicArena
+tick (BasicArena actors) = BasicArena (map move actors)
 
 
 operateBasicArena :: BasicArena -> IO ()
 operateBasicArena a = do
     print a
     line <- getLine
-    when (null line) $ operateBasicArena (moveAll a)
+    when (null line) $ operateBasicArena (tick a)
         
 main = do
     rnd <- newStdGen

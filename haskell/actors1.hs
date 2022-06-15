@@ -25,14 +25,14 @@ move = moveX . moveY
 data BallArena = BallArena { balls :: [Ball]
                            } deriving (Show)
 
-moveAll :: BallArena -> BallArena
-moveAll (BallArena balls) = BallArena (map move balls)
+tick :: BallArena -> BallArena
+tick (BallArena balls) = BallArena (map move balls)
 
 operateArena :: BallArena -> IO ()
 operateArena a = do
     print a
     line <- getLine
-    when (null line) $ operateArena (moveAll a)
+    when (null line) $ operateArena (tick a)
 
 main = do
     operateArena (BallArena [Ball 200 100 5 5, Ball 300 200 10 0])

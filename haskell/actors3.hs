@@ -7,14 +7,14 @@ class (Show a) => Actor a where
 data Arena a = Arena { actors :: [a]
                      } deriving (Show)
 
-moveAll :: (Actor a) => Arena a -> Arena a
-moveAll (Arena actors) = Arena (map move actors)
+tick :: (Actor a) => Arena a -> Arena a
+tick (Arena actors) = Arena (map move actors)
 
 operateArena :: (Actor a) => Arena a -> IO ()
 operateArena a = do
     print a
     line <- getLine
-    when (null line) $ operateArena (moveAll a)
+    when (null line) $ operateArena (tick a)
 
 ----
 
