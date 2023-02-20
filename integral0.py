@@ -24,4 +24,5 @@ def main():
     area = integral(1, 10, 1_000_000)
     print(area)
 
-main()
+if __name__ == "__main__":
+    main()

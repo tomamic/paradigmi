@@ -3,12 +3,13 @@
 @author  Michele Tomaiuolo - http://www.ce.unipr.it/people/tomamic
 @license This software is free - http://www.gnu.org/licenses/gpl.html
 '''
-import math
+import math, typing
 
 def some_func(x: float) -> float:
     return x * x + x
 
-def integral(f, a: float, b: float, n: int) -> float:
+def integral(f: typing.Callable[[float], float],
+             a: float, b: float, n: int) -> float:
     """
     Estimate the area beneath the curve py_f, between the
     abscissas a and b; the region is approximated as n rectangles.
@@ -27,4 +28,5 @@ def main():
     area_sin = integral(math.sin, 0, math.pi, 1_000_000)
     print(area_sin)
 
-main()
+if __name__ == "__main__":
+    main()
