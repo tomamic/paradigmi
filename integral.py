@@ -3,7 +3,7 @@
 @author  Michele Tomaiuolo - http://www.ce.unipr.it/people/tomamic
 @license This software is free - http://www.gnu.org/licenses/gpl.html
 '''
-import math, typing
+import math, subprocess, time, typing
 
 def some_func(x: float) -> float:
     return x * x + x
@@ -41,8 +41,6 @@ def example():
     print(area_sin)
     
 def cpp_vs_py():
-    import subprocess, time
-
     subprocess.run(["g++", "-O3", "integral.cpp", "-o", "_integral"])
 
     t0 = time.time()
