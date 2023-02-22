@@ -10,7 +10,7 @@ def some_func(x: float) -> float:
 
 def some_integral(a: float, b: float, n: int) -> float:
     """
-    Estimate the area beneath the curve py_f, between the
+    Estimate the area beneath the curve some_func, between the
     abscissas a and b; the region is approximated as n rectangles.
     """
     ## add a new param f: "types.Callable[[float], float]"
@@ -23,7 +23,7 @@ def some_integral(a: float, b: float, n: int) -> float:
 def integral(f: typing.Callable[[float], float],
              a: float, b: float, n: int) -> float:
     """
-    Estimate the area beneath the curve py_f, between the
+    Estimate the area beneath the curve f, between the
     abscissas a and b; the region is approximated as n rectangles.
     """
     ## add a new param f: "types.Callable[[float], float]"
