@@ -5,27 +5,7 @@ import matplotlib.mlab as mlab
 import seaborn as sns
 import glob
 
-sns.set_palette("tab20")
-
-def get_marks(data: pd.DataFrame) -> pd.DataFrame:
-    rows = []
-    unit, question = None, None
-
-    for i, row in data.iterrows():
-        if row[0] == "UD:":
-            unit = row[1].split()[0]
-            question = 1
-        elif "?" in str(row[0]):
-            students = np.int32(row[2])
-            answers = np.int32(row[4:9:2])
-            weights = np.arange(10, 40, 10)
-            mark = np.sum(weights * answers) / students
-            rows.append([unit, question, students, mark])
-            question += 1
-
-    columns=["Unit", "Question", "Students", "Mark"]
-    df = pd.DataFrame(rows, columns=columns)
-    return df
+#sns.set_palette("tab20")
 
 def get_units(data: pd.DataFrame) -> pd.DataFrame:
     rows = []
@@ -46,24 +26,22 @@ def plot_units(units: pd.DataFrame, yy: str):
     studs, marks = units["Students"], units["Mark"]
 
     fig = plt.figure(f"units-scatter-{yy}")
-    sns.scatterplot(studs, marks)
+    sns.scatterplot(x=studs, y=marks)
 
     fig = plt.figure(f"units-scatter")
-    sns.scatterplot(studs, marks, label=yy)
+    sns.scatterplot(x=studs, y=marks, label=yy)
 
     fig = plt.figure("units-density")
     avg, std = np.average(marks), np.std(marks)
     text = f"{yy}:\navg={avg:.2f},\nstd={std:.2f}"
-    sns.distplot(marks, label=text, hist=False, kde=True,
-                 kde_kws={"shade": True, "linewidth": 3})
+    sns.kdeplot(marks, label=text)
 
 def plot_questions(data: pd.DataFrame, yy: str):
     marks = data["Mark"]
     fig = plt.figure("questions-density")
     avg, std = np.average(marks), np.std(marks)
     text = f"{yy}:\navg={avg:.2f},\nstd={std:.2f}"
-    sns.distplot(marks, label=text, hist=False, kde=True,
-                 kde_kws={"shade": True, "linewidth": 3})
+    sns.kdeplot(marks, label=text)
 
 def plot_question(data: pd.DataFrame, quest: int, yy: str):
     # Subset to the question
@@ -73,23 +51,20 @@ def plot_question(data: pd.DataFrame, quest: int, yy: str):
     fig = plt.figure(f"questions-density-Q{quest:02}")
     avg, std = np.average(marks), np.std(marks)
     text = f"{yy}:\navg={avg:.2f},\nstd={std:.2f}"
-    sns.distplot(marks, label=text, hist=False, kde=True,
-                 kde_kws={"shade": True, "linewidth": 3})
+    sns.kdeplot(marks, label=text, fill=True)
 
     fig = plt.figure(f"questions-density-{yy}")
     text = f"Q{quest:02}"
-    sns.distplot(marks, label=text, hist=False, kde=True,
-                 kde_kws={"shade": True, "linewidth": 3})
+    sns.kdeplot(marks, label=text)
 
     fig = plt.figure(f"questions-scatter-{yy}")
-    sns.scatterplot(studs, marks, label=f"Q{quest:02}")
+    sns.scatterplot(x=studs, y=marks, label=f"Q{quest:02}")
 
 def main():
-    for filename in reversed(glob.glob("report-*.csv")):
+    for filename in reversed(glob.glob("marks-*.csv")):
         # transform data
-        yy = filename[7:-4]
-        report = pd.read_csv(filename)
-        data = get_marks(report)
+        yy = filename.split("-", 1)[1].split(".", 1)[0]
+        data = pd.read_csv(filename)
         #data.to_csv(f"marks-{yy}.csv", index=False)
         units = get_units(data)
         #units.to_csv(f"units-{yy}.csv", index=False)
@@ -103,6 +78,7 @@ def main():
     # save figures
     for i in plt.get_fignums():
         fig = plt.figure(i)
+        plt.legend()
         fig.savefig(fig.get_label() + ".pdf")
 
 main()
