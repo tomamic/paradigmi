@@ -11,9 +11,14 @@ xorshift32 a = d where
   d = c `xor` (c `shiftL` 5)
 
 randint :: (Int, Int) -> Rng32 -> (Int, Rng32)
-randint (nmin, nmax) rng =
-    (nmin + ((fromIntegral nxt) `mod` (nmax + 1 - nmin)), nxt)
-    where nxt = xorshift32 rng
+randint (nmin, nmax) gen = (val, nxt) where
+    nxt = xorshift32 gen
+    val = nmin + (fromIntegral nxt) `mod` (nmax + 1 - nmin)
+
+randints :: (Int, Int) -> Rng32 -> [Int]
+randints range gen =
+    val : randints range nxt
+    where (val, nxt) = randint range gen
 
 getRng32 :: IO Rng32
 getRng32 = do
