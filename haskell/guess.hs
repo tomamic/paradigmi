@@ -2,8 +2,7 @@ import System.Random
 
 process :: [Int] -> [String] -> [String]
 process secrets guesses =
-    "Which number (1-10) am I thinking of?":
-        check secrets guesses
+    "Which number (1-10) am I thinking of?" : check secrets guesses
 
 check :: [Int] -> [String] -> [String]
 check _ ("":_) = []
