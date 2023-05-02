@@ -20,6 +20,10 @@ randints range gen =
     val : randints range nxt
     where (val, nxt) = randint range gen
 
+chunksOf n [] = []
+chunksOf n xs = a : chunksOf n b where
+  (a, b) = splitAt n xs
+
 getRng32 :: IO Rng32
 getRng32 = do
     now <- getPOSIXTime
