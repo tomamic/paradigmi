@@ -32,13 +32,19 @@ data BasicActor = Ball { x :: Int, y :: Int, dx :: Int, dy :: Int }
                 | Ghost { x :: Int, y :: Int, rnd :: StdGen}
                 | Turtle { x :: Int, y :: Int, dead :: Bool} deriving (Show)
 
+collide :: BasicActor -> BasicActor -> BasicActor
+collide (Ball x y _ _) (Ball x2 y2 _ _) = Ball … -- TODO
+collide (Ball x y _ _) (Turtle x2 y2 _) = Ball … -- TODO
+collide (Turtle x y _) (Ball _ _ _ _) = Turtle … -- TODO
+collide a _ = a
+
 instance Actor BasicActor where
     rect (Ball x y _ _) = (x, y, actorW, actorH)
     rect (Ghost x y _) = (x, y, actorW, actorH)
     rect (Turtle x y _) = (x, y, actorW, actorH)
-    move keys actors (Ball x y dx dy) = ... -- TODO
-    move keys actors (Ghost x y rnd) = ... -- TODO
-    move keys actors (Turtle x y dead) = ... -- TODO
+    move keys actors (Ball x y dx dy) = … -- TODO
+    move keys actors (Ghost x y rnd) = … -- TODO
+    move keys actors (Turtle x y dead) = … -- TODO
 
 main = do
     rnd <- newStdGen
