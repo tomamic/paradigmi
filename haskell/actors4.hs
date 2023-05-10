@@ -37,6 +37,8 @@ instance Actor BasicActor where
     rect (Ghost x y _) = (x, y, actorW, actorH)
     rect (Turtle x y _) = (x, y, actorW, actorH)
     move keys actors (Ball x y dx dy) = ... -- TODO
+    move keys actors (Ghost x y rnd) = ... -- TODO
+    move keys actors (Turtle x y dead) = ... -- TODO
 
 main = do
     rnd <- newStdGen
