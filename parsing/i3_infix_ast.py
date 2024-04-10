@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-'''
+"""
 @author  Michele Tomaiuolo - http://www.ce.unipr.it/people/tomamic
 @license This software is free - http://www.gnu.org/licenses/gpl.html
-'''
+"""
 
 from i3_infix_eval import parse_expr
 
 class Expression:
     def print(self, indent):
-        raise NotImplementedError('Abstract method')
+        raise NotImplementedError("Abstract method")
 
 class BinaryOp(Expression):
     def __init__(self, op, x, y):
@@ -54,10 +54,10 @@ class Actions:
 # Tests.
 act = Actions()
 
-if __name__ == '__main__':
-    parse_expr('(((1.5)))', act).print("")
-    parse_expr('w * -z', act).print("")
-    parse_expr('x / z * -y', act).print("")
-    parse_expr('x / 0.5 * --y', act).print("")
-    parse_expr('w', act).print("")
-    parse_expr('(x + w) * (x + y) * (y - z)', act).print("")
+if __name__ == "__main__":
+    parse_expr("(((1.5)))", act).print("")
+    parse_expr("w * -z", act).print("")
+    parse_expr("x / z * -y", act).print("")
+    parse_expr("x / 0.5 * --y", act).print("")
+    parse_expr("w", act).print("")
+    parse_expr("(x + w) * (x + y) * (y - z)", act).print("")

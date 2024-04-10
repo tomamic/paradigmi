@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-'''
+"""
 @author  Michele Tomaiuolo - http://www.ce.unipr.it/people/tomamic
 @license This software is free - http://www.gnu.org/licenses/gpl.html
-'''
+"""
 
-# expr = term {( '+' | '-' ) term}
-# term = factor {( '*' | '/' ) factor}
-# factor = '-' factor | '(' expr ')' | var | num
-# var = 'w' | 'x' | 'y' | 'z'
+# expr = term {( "+" | "-" ) term}
+# term = factor {( "*" | "/" ) factor}
+# factor = "-" factor | "(" expr ")" | var | num
+# var = "w" | "x" | "y" | "z"
 
 import re
 
@@ -15,37 +15,37 @@ import re
 def expr(tok, act):
     x = term(tok, act)
     nxt = tok.peek()
-    while nxt in ('+', '-'):
+    while nxt in ("+", "-"):
         tok.consume(nxt)
         y = term(tok, act)
-        if nxt == '+': x = act.add(x, y)
+        if nxt == "+": x = act.add(x, y)
         else: x = act.sub(x, y)
         nxt = tok.peek()
     return x
 
-# term = factor {( '*' | '/' ) factor}
+# term = factor {( "*" | "/" ) factor}
 def term(tok, act):
     x = factor(tok, act)
     nxt = tok.peek()
-    while nxt in ('*', '/'):
+    while nxt in ("*", "/"):
         tok.consume(nxt)
         y = factor(tok, act)
-        if nxt == '*': x = act.mul(x, y)
+        if nxt == "*": x = act.mul(x, y)
         else: x = act.div(x, y)
         nxt = tok.peek()
     return x
 
-# factor = '-' factor | '(' expr ')' | var | num
+# factor = "-" factor | "(" expr ")" | var | num
 def factor(tok, act):
     nxt = tok.peek()
-    if nxt == '-':
-        tok.consume('-')
+    if nxt == "-":
+        tok.consume("-")
         x = factor(tok, act)
         return act.opp(x)
-    elif nxt == '(':
-        tok.consume('(')
+    elif nxt == "(":
+        tok.consume("(")
         x = expr(tok, act)
-        tok.consume(')')
+        tok.consume(")")
         return x
     elif nxt.isalpha():
         tok.consume(nxt)
@@ -89,7 +89,7 @@ class Tokenizer:
             raise SyntaxError("Extra stuff after expression")
 
 
-regex = r'\s*([A-Za-z0-9\.]+|.?)'
+regex = r"\s*([A-Za-z0-9\.]+|.?)"
 
 
 # Wrapper function
@@ -101,13 +101,13 @@ def parse_expr(text, act):
 
 
 # Tests
-values = {'w': 0.0, 'x': 1.0, 'y': 1.5, 'z': 0.5}
+values = {"w": 0.0, "x": 1.0, "y": 1.5, "z": 0.5}
 act = Actions(values)
 
-if __name__ == '__main__':
-    assert parse_expr('(((1.5)))', act) == 1.5
-    assert parse_expr('w * -z', act) == 0
-    assert parse_expr('x / z * -y', act) == -3
-    assert parse_expr('x / 0.5 * --y', act) == 3
-    assert parse_expr('w', act) == 0
-    assert parse_expr('(x + w) * (x + y) * (y - z)', act) == 2.5
+if __name__ == "__main__":
+    assert parse_expr("(((1.5)))", act) == 1.5
+    assert parse_expr("w * -z", act) == 0
+    assert parse_expr("x / z * -y", act) == -3
+    assert parse_expr("x / 0.5 * --y", act) == 3
+    assert parse_expr("w", act) == 0
+    assert parse_expr("(x + w) * (x + y) * (y - z)", act) == 2.5
