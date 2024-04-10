@@ -260,7 +260,7 @@ class Demon(object):
         else:
             dicts = p.map(Functor(self.G), nodiEgo)
         time_second = time.time()
-        p.join
+        p.join()
         print("Map End")
 
         #MERGING
