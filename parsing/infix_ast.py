@@ -6,13 +6,9 @@
 
 from infix_eval import parse_expr
 from math import isclose
-import operator
+from operator import add, sub, mul, truediv, neg
 
-ops = {"+": operator.add,
-       "-": operator.sub,
-       "*": operator.mul,
-       "/": operator.truediv,
-       "~": operator.neg}
+ops = {"+": add, "-": sub, "*": mul, "/": truediv, "~": neg}
 
 class Expression:
     def to_prefix(self) -> str:
@@ -33,7 +29,8 @@ class BinaryOp(Expression):
     def eval(self, ctx):
         x = self._x.eval(ctx)
         y = self._y.eval(ctx)
-        return ops[self._op](x, y)
+        op = ops[self._op]
+        return op(x, y)
 
 
 class UnaryOp(Expression):
@@ -46,7 +43,8 @@ class UnaryOp(Expression):
 
     def eval(self, ctx):
         x = self._x.eval(ctx)
-        return ops[self._op](x)
+        op = ops[self._op]
+        return op(x)
 
 class Var(Expression):
     def __init__(self, name):
