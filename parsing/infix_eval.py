@@ -4,13 +4,13 @@
 @license This software is free - http://www.gnu.org/licenses/gpl.html
 """
 
+import re
+from math import isclose
+
 # expr = term {( "+" | "-" ) term}
 # term = factor {( "*" | "/" ) factor}
 # factor = "-" factor | "(" expr ")" | var | num
 # var = "w" | "x" | "y" | "z"
-
-import re
-
 
 # expr = term {( "+" | "-" ) term}
 def expr(tok, act):
@@ -100,13 +100,18 @@ def parse_expr(text, act):
 
 
 # Tests
-if __name__ == "__main__":
+def main():
     ctx = {"w": 0.0, "x": 1.0, "y": 1.5, "z": 0.5}
     act = Action(ctx)
 
-    assert parse_expr("(((1.5)))", act) == 1.5
-    assert parse_expr("w * -z", act) == 0
-    assert parse_expr("x / z * -y", act) == -3
-    assert parse_expr("x / 0.5 * --y", act) == 3
-    assert parse_expr("w", act) == 0
-    assert parse_expr("(x + w) * (x + y) * (y - z)", act) == 2.5
+    tests = [("(((1.5)))", 1.5),
+             ("w * -z", 0),
+             ("x / z * -y", -3),
+             ("x / 0.5 * --y", 3),
+             ("w", 0),
+             ("(x + w) * (x + y)", 2.5)]
+    for infix, val in tests:
+        assert isclose(parse_expr(infix, act), val)
+
+if __name__ == "__main__":
+    main()

@@ -4,7 +4,7 @@
 @license This software is free - http://www.gnu.org/licenses/gpl.html
 """
 
-from i3_infix_eval import parse_expr
+from infix_eval import parse_expr
 from math import isclose
 
 class Expression:
@@ -82,7 +82,7 @@ class Action:
 
 
 # Tests
-if __name__ == "__main__":
+def main():
     ctx = {"w": 0.0, "x": 1.0, "y": 1.5, "z": 0.5}
 
     tests = [("(((1.5)))", "1.5", 1.5),
@@ -90,10 +90,13 @@ if __name__ == "__main__":
              ("x / z * -y", "* / x z ~y", -3.0),
              ("x / 0.5 * --y", "* / x 0.5 ~~y", 3.0),
              ("w", "w", 0.0),
-             ("(x + w) * (x + y) ", "* + x w + x y", 2.5)]
+             ("(x + w) * (x + y)", "* + x w + x y", 2.5)]
 
     act = Action()
     for infix, prefix, val in tests:
         expr = parse_expr(infix, act)
         assert expr.to_prefix() == prefix
         assert isclose(expr.eval(ctx), val)
+
+if __name__ == "__main__":
+    main()

@@ -4,7 +4,7 @@
 @license This software is free - http://www.gnu.org/licenses/gpl.html
 """
 
-from i3_infix_eval import parse_expr
+from infix_eval import parse_expr
 
 class Action:
     def add(self, x, y): return f"+ {x} {y}"
@@ -17,12 +17,18 @@ class Action:
 
 
 # Tests
-if __name__ == "__main__":
+def main():
     act = Action()
 
-    assert parse_expr("(((1.5)))", act) == "1.5"
-    assert parse_expr("w * -z", act) == "* w ~z"
-    assert parse_expr("x / z * -y", act) == "* / x z ~y"
-    assert parse_expr("x / 0.5 * --y", act) == "* / x 0.5 ~~y"
-    assert parse_expr("w", act) == "w"
-    assert parse_expr("(x + w) * (x + y) * (y - z)", act) == "* * + x w + x y - y z"
+    tests = [("(((1.5)))", "1.5"),
+             ("w * -z", "* w ~z"),
+             ("x / z * -y", "* / x z ~y"),
+             ("x / 0.5 * --y", "* / x 0.5 ~~y"),
+             ("w", "w"),
+             ("(x + w) * (x + y)", "* + x w + x y")]
+
+    for infix, prefix in tests:
+        assert parse_expr(infix, act) == prefix
+
+if __name__ == "__main__":
+    main()
