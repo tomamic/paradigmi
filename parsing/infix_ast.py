@@ -6,6 +6,13 @@
 
 from infix_eval import parse_expr
 from math import isclose
+import operator
+
+ops = {"+": operator.add,
+       "-": operator.sub,
+       "*": operator.mul,
+       "/": operator.truediv,
+       "~": operator.neg}
 
 class Expression:
     def to_prefix(self) -> str:
@@ -23,6 +30,12 @@ class BinaryOp(Expression):
         y = self._y.to_prefix()
         return f"{self._op} {x} {y}"
 
+    def eval(self, ctx):
+        x = self._x.eval(ctx)
+        y = self._y.eval(ctx)
+        return ops[self._op](x, y)
+
+
 class UnaryOp(Expression):
     def __init__(self, op, x):
         self._op, self._x = op, x
@@ -30,6 +43,10 @@ class UnaryOp(Expression):
     def to_prefix(self):
         x = self._x.to_prefix()
         return f"{self._op}{x}"
+
+    def eval(self, ctx):
+        x = self._x.eval(ctx)
+        return ops[self._op](x)
 
 class Var(Expression):
     def __init__(self, name):
@@ -51,32 +68,13 @@ class Num(Expression):
     def eval(self, ctx):
         return self._val
 
-class Add(BinaryOp):
-    def eval(self, ctx):
-        return self._x.eval(ctx) + self._y.eval(ctx)
-
-class Sub(BinaryOp):
-    def eval(self, ctx):
-        return self._x.eval(ctx) - self._y.eval(ctx)
-
-class Mul(BinaryOp):
-    def eval(self, ctx):
-        return self._x.eval(ctx) * self._y.eval(ctx)
-
-class Div(BinaryOp):
-    def eval(self, ctx):
-        return self._x.eval(ctx) / self._y.eval(ctx)
-
-class Opp(UnaryOp):
-    def eval(self, ctx):
-        return -self._x.eval(ctx)
 
 class Action:
-    def add(self, x, y): return Add("+", x, y)
-    def sub(self, x, y): return Sub("-", x, y)
-    def mul(self, x, y): return Mul("*", x, y)
-    def div(self, x, y): return Div("/", x, y)
-    def opp(self, x): return Opp("~", x)
+    def add(self, x, y): return BinaryOp("+", x, y)
+    def sub(self, x, y): return BinaryOp("-", x, y)
+    def mul(self, x, y): return BinaryOp("*", x, y)
+    def div(self, x, y): return BinaryOp("/", x, y)
+    def neg(self, x): return UnaryOp("~", x)
     def num(self, x): return Num(float(x))
     def var(self, x): return Var(x)
 

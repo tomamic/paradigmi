@@ -11,7 +11,7 @@ class Action:
     def sub(self, x, y): return f"- {x} {y}"
     def mul(self, x, y): return f"* {x} {y}"
     def div(self, x, y): return f"/ {x} {y}"
-    def opp(self, x): return f"~{x}"
+    def neg(self, x): return f"~{x}"
     def num(self, x): return x
     def var(self, x): return x
 

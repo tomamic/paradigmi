@@ -42,7 +42,7 @@ def factor(tok, act):
     if nxt == "-":
         tok.consume("-")
         x = factor(tok, act)
-        return act.opp(x)
+        return act.neg(x)
     elif nxt == "(":
         tok.consume("(")
         x = expr(tok, act)
@@ -65,7 +65,7 @@ class Action:
     def sub(self, x, y): return x - y
     def mul(self, x, y): return x * y
     def div(self, x, y): return x / y
-    def opp(self, x): return -x
+    def neg(self, x): return -x
     def num(self, x): return float(x)
     def var(self, x): return self._ctx.get(x, 0)
 
