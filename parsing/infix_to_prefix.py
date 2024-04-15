@@ -6,7 +6,7 @@
 
 from i3_infix_eval import parse_expr
 
-class Actions:
+class Action:
     def add(self, x, y): return f"+ {x} {y}"
     def sub(self, x, y): return f"- {x} {y}"
     def mul(self, x, y): return f"* {x} {y}"
@@ -16,10 +16,10 @@ class Actions:
     def var(self, x): return x
 
 
-# Tests.
-act = Actions()
-
+# Tests
 if __name__ == "__main__":
+    act = Action()
+
     assert parse_expr("(((1.5)))", act) == "1.5"
     assert parse_expr("w * -z", act) == "* w ~z"
     assert parse_expr("x / z * -y", act) == "* / x z ~y"

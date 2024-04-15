@@ -12,6 +12,7 @@
 import re
 
 
+# expr = term {( "+" | "-" ) term}
 def expr(tok, act):
     x = term(tok, act)
     nxt = tok.peek()
@@ -57,16 +58,16 @@ def factor(tok, act):
         return x
 
 
-class Actions:
-    def __init__(self, values):
-        self._values = values
+class Action:
+    def __init__(self, ctx):
+        self._ctx = ctx
     def add(self, x, y): return x + y
     def sub(self, x, y): return x - y
     def mul(self, x, y): return x * y
     def div(self, x, y): return x / y
     def opp(self, x): return -x
     def num(self, x): return float(x)
-    def var(self, x): return self._values[x]
+    def var(self, x): return self._ctx.get(x, 0)
 
 
 class Tokenizer:
@@ -89,11 +90,9 @@ class Tokenizer:
             raise SyntaxError("Extra stuff after expression")
 
 
-regex = r"\s*([A-Za-z0-9\.]+|.?)"
-
-
 # Wrapper function
 def parse_expr(text, act):
+    regex = r"\s*([A-Za-z0-9\.]+|.?)"
     tok = Tokenizer(text, regex)
     result = expr(tok, act)
     tok.end()
@@ -101,10 +100,10 @@ def parse_expr(text, act):
 
 
 # Tests
-values = {"w": 0.0, "x": 1.0, "y": 1.5, "z": 0.5}
-act = Actions(values)
-
 if __name__ == "__main__":
+    ctx = {"w": 0.0, "x": 1.0, "y": 1.5, "z": 0.5}
+    act = Action(ctx)
+
     assert parse_expr("(((1.5)))", act) == 1.5
     assert parse_expr("w * -z", act) == 0
     assert parse_expr("x / z * -y", act) == -3
