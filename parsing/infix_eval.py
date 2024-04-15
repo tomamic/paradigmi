@@ -71,29 +71,27 @@ class Action:
 
 
 class Tokenizer:
-    def __init__(self, text, regex):
-        self._text = text.rstrip()
-        self._point = 0
-        self._token_re = re.compile(regex)
+    def __init__(self, text):
+        regex = r"\s*([A-Za-z0-9\.]+|.?)"
+        self._tokens = re.finditer(regex, text.rstrip())
+        self._next = next(self._tokens)
 
-    def peek(self):
-        return self._token_re.match(self._text, self._point).group(1)
+    def peek(self) -> str:
+        return self._next.group(1)
 
     def consume(self, x):
-        m = self._token_re.match(self._text, self._point)
-        if m.group(1) != x:
-            raise SyntaxError("expected " + x)
-        self._point = m.end()
+        if self.peek() != x:
+            raise SyntaxError("Expected " + x)
+        self._next = next(self._tokens)
 
     def end(self):
-        if self._point < len(self._text):
-            raise SyntaxError("Extra stuff after expression")
+        if self.peek():
+            raise SyntaxError("Extra tokens")
 
 
 # Wrapper function
 def parse_expr(text, act):
-    regex = r"\s*([A-Za-z0-9\.]+|.?)"
-    tok = Tokenizer(text, regex)
+    tok = Tokenizer(text)
     result = expr(tok, act)
     tok.end()
     return result
