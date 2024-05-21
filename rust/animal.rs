@@ -1,5 +1,5 @@
 pub trait Animal {
-    fn say(&self);
+    fn speak(&self);
 }
 
 pub struct Dog {
@@ -11,7 +11,7 @@ impl Dog {
     }
 }
 impl Animal for Dog {
-    fn say(&self) {
+    fn speak(&self) {
         println!("I'm {} Dog. I say WOOF!", self.name);
     }
 }
@@ -25,7 +25,7 @@ impl Cat {
     }
 }
 impl Animal for Cat {
-    fn say(&self) {
+    fn speak(&self) {
         println!("I'm {} Cat. I say MEOW!", self.name);
     }
 }
@@ -39,7 +39,7 @@ impl Pig {
     }
 }
 impl Animal for Pig {
-    fn say(&self) {
+    fn speak(&self) {
         println!("I'm {} Pig. I say OINK!", self.name);
     }
 }

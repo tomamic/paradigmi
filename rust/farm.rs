@@ -7,7 +7,7 @@ pub struct Farm<T: Animal> {
 impl<T: Animal> Farm<T> {
     fn run(&self) {
         for a in self.animals.iter() {
-            a.say();
+            a.speak();
         }
     }
 }
@@ -18,7 +18,7 @@ pub struct DynFarm {
 impl DynFarm {
     pub fn run(&self) {
         for a in self.animals.iter() {
-            a.say();
+            a.speak();
         }
     }
 }
