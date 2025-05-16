@@ -73,6 +73,16 @@ impl Expr for Num {
     }
 }
 
+fn from_prefix(tokens: &mut Vec<&str>) -> Box<dyn Expr> {
+    let token = tokens.remove(0);
+    if let Ok(v) = token.parse::<f64>() {
+        Box::new(Num::new(v))
+    } else {
+        let a = from_prefix(tokens);
+        let b = from_prefix(tokens);
+        Box::new(BinaryOp::new(token.to_string(), a, b))
+    } // ...
+}
 
 fn main() {
     //          *  (prod2)
@@ -87,4 +97,8 @@ fn main() {
     let sum1 = BinaryOp::new(String::from("+"), Box::new(Num::new(4.0)), Box::new(prod1));
     let prod2 = BinaryOp::new(String::from("*"), Box::new(sum1), Box::new(Num::new(5.0)));
     println!("{}", prod2.eval(&HashMap::new()));
+
+    let mut tokens: Vec<&str> = "* 5 + * 3 2 4".split_whitespace().collect();
+    let expr = from_prefix(&mut tokens);
+    println!("{}", expr.eval(&HashMap::new()));
 }
