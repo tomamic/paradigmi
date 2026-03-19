@@ -1,3 +1,5 @@
+-- Marsaglia https://doi.org/10.18637/jss.v008.i14
+
 import Data.Word (Word32)
 import Data.Bits (xor, shiftL, shiftR)
 import Data.Time.Clock.POSIX (getPOSIXTime)
