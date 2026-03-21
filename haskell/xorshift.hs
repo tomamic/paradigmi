@@ -5,8 +5,10 @@ import Data.Bits (xor, shiftL, shiftR)
 import Data.Time.Clock.POSIX (getPOSIXTime)
 import GHC.Exts (sortWith)
 
-type Rng = Word64
+(//) = div
 (%%) = mod
+
+type Rng = Word64
 
 xorshift :: Rng -> Rng
 xorshift a = d where
@@ -28,11 +30,18 @@ shuffle vals gen = (shuffled, nxt) where
     (rs, nxt:_) = splitAt (length vals) $ iterate xorshift gen
     shuffled = map snd $ sortWith fst $ zip rs vals
 
-chunksOf n [] = []
-chunksOf n xs = a : chunksOf n b where
-  (a, b) = splitAt n xs
-
 getRng :: IO Rng
 getRng = do
     now <- getPOSIXTime
     return (round (now * 1000) :: Rng)
+
+chunksOf :: Int -> [a] -> [[a]]
+chunksOf n [] = []
+chunksOf n xs = chunk : chunksOf n rest where
+  (chunk, rest) = splitAt n xs
+
+split :: Eq a => a -> [a] -> [[a]]
+split sep xs
+    | null rest = [chunk]
+    | otherwise = chunk : split sep (tail rest)
+    where (chunk, rest) = break (==sep) xs
