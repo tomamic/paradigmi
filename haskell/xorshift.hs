@@ -1,5 +1,3 @@
--- Marsaglia https://doi.org/10.18637/jss.v008.i14
-
 import Data.Word (Word64)
 import Data.Bits (xor, shiftL, shiftR)
 import Data.Time.Clock.POSIX (getPOSIXTime)
@@ -10,6 +8,7 @@ import GHC.Exts (sortWith)
 
 type Rng = Word64
 
+-- Marsaglia https://doi.org/10.18637/jss.v008.i14
 xorshift :: Rng -> Rng
 xorshift a = d where
   b = a `xor` (a `shiftL` 13)
@@ -45,3 +44,5 @@ split sep xs
     | null rest = [chunk]
     | otherwise = chunk : split sep (tail rest)
     where (chunk, rest) = break (==sep) xs
+
+takeWhileInc p = foldr (\x acc -> if p x then x:acc else [x]) []
