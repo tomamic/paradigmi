@@ -1,0 +1,16 @@
+data Elem = Document String String
+          | Folder String [Elem]
+          deriving (Show, Read, Eq)
+
+sizeNode (Document _ content) = length content
+sizeNode (Folder _ nodes) = sum $ map sizeNode nodes
+
+prodD = Document "prod.csv" "1,2,3,4"
+dataF = Folder "data" [prodD]
+a1_0D = Document "a1.txt" "bla bla 0"
+workF = Folder "Work" [a1_0D, dataF]
+a1_1D = Document "a1.txt" "a different file"
+personalF = Folder "Personal" [a1_1D]
+desktopF = Folder "Desktop" [workF, personalF]
+
+main = print $ sizeNode desktopF
