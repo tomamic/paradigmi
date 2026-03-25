@@ -29,6 +29,10 @@ shuffle vals gen = (shuffled, nxt) where
     (rs, nxt:_) = splitAt (length vals) $ iterate xorshift gen
     shuffled = map snd $ sortWith fst $ zip rs vals
 
+choice :: [a] -> Rng -> (a, Rng)
+choice options rng = (options !! d, rng')
+    where (d, rng') = randint (0, (length options - 1)) rng
+
 getRng :: IO Rng
 getRng = do
     now <- getPOSIXTime
