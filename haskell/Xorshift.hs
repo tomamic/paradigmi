@@ -5,8 +5,8 @@ import Data.Bits (xor, shiftL, shiftR)
 import Data.Time.Clock.POSIX (getPOSIXTime)
 import GHC.Exts (sortWith)
 
-(//) = div
-(%%) = mod
+(//) = div :: Int -> Int -> Int
+(%%) = mod :: Int -> Int -> Int
 
 type Rng = Word64
 
