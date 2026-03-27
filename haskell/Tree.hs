@@ -1,0 +1,19 @@
+module Tree where
+
+data Tree a = EmptyTree
+               | Node a (Tree a) (Tree a)
+               deriving (Show, Read, Eq)
+
+singleton :: a -> Tree a    -- just a shortcut f.
+singleton x = Node x EmptyTree EmptyTree
+
+treeInsert :: (Ord a) => a -> Tree a -> Tree a
+treeInsert x EmptyTree = singleton x
+treeInsert x t@(Node a left right)
+    | x == a = t
+    | x < a  = Node a (treeInsert x left) right
+    | x > a  = Node a left (treeInsert x right)
+
+-- main = print numsTree where
+--     nums = [8,6,4,1,7,3,5]
+--     numsTree = foldr treeInsert EmptyTree nums
