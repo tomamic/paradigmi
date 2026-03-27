@@ -1,3 +1,5 @@
+module Xorshift where
+
 import Data.Word (Word64)
 import Data.Bits (xor, shiftL, shiftR)
 import Data.Time.Clock.POSIX (getPOSIXTime)
