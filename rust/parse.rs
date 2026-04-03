@@ -2,8 +2,7 @@
 // @license This software is free - http://www.gnu.org/licenses/gpl.html
 
 mod syntree;
-use syntree::{Expr, BinaryOp, Negate, Var, Num};
-use std::collections::HashMap;
+use syntree::{Expr, BinaryOp, Num};
 
 fn find_tokens(txt: &str) -> Vec<String> {
     let mut tokens : Vec<String> = Vec::new();
@@ -68,7 +67,7 @@ impl Tokenizer {
 
 // expr = term {( "+" | "-" ) term}
 // term = factor {( "*" | "/" ) factor}
-// factor = "-" factor | "(" expr ")" | identifier | number
+// factor = "~" factor | "(" expr ")" | identifier | number
 // (identifiers start with a letter, numbers are float)
 
 // expr = term {( "+" | "-" ) term}
@@ -97,11 +96,7 @@ fn term(tok: &mut Tokenizer) -> Box<dyn Expr> {
 
 // factor = "-" factor | "(" expr ")" | identifier | number
 fn factor(tok: &mut Tokenizer) -> Box<dyn Expr> {
-    if tok.peek_str() == "-" {
-        tok.consume();
-        let x = factor(tok);
-        Box::new(Negate::new(x))
-    } else if tok.peek_str() == "(" {
+    if tok.peek_str() == "(" {
         tok.consume();
         let x = expr(tok);
         tok.consume_str(")");
@@ -110,31 +105,18 @@ fn factor(tok: &mut Tokenizer) -> Box<dyn Expr> {
         tok.consume();
         Box::new(Num::new(v))
     } else {
-        let name = tok.peek();
-        tok.consume();
-        Box::new(Var::new(name))
+        panic!("Unknown token");
     }
 }
 
 // Tests
 fn main() {
-    let ctx = HashMap::from([("w".to_string(), 0.0),
-                             ("x".to_string(), 1.0),
-                             ("y".to_string(), 1.5),
-                             ("z".to_string(), 0.5)]);
+    let tests = [("5 * (3 * 2 + 4)", 50.0)];
 
-    let tests = [("(((1.5)))", "1.5", 1.5),
-                 ("w * -z", "* w ~z", 0.0),
-                 ("x / z * -y", "* / x z ~y", -3.0),
-                 ("x / 0.5 * --y", "* / x 0.5 ~~y", 3.0),
-                 ("w", "w", 0.0),
-                 ("(x + w) * (x + y)", "* + x w + x y", 2.5)];
-
-    for (infix, prefix, val) in tests {
+    for (infix, val) in tests {
         let mut tok = Tokenizer::new(&infix.to_string());
         let ast = expr(&mut tok);
         tok.end();
-        //assert!(ast.prefix() == prefix, "Wrong prefix form");
-        assert!((ast.eval(&ctx) - val).abs() < f64::EPSILON, "Wrong value");
+        assert!((ast.eval() - val).abs() < f64::EPSILON, "Wrong value");
     }
 }
