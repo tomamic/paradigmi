@@ -1,8 +1,10 @@
 // @author  Michele Tomaiuolo - http://www.ce.unipr.it/people/tomamic
 // @license This software is free - http://www.gnu.org/licenses/gpl.html
 
+use std::collections::HashMap;
+
 pub trait Expr {
-    fn eval(&self) -> f64;
+    fn eval(&self, ctx: &HashMap<String, f64>) -> f64;
 }
 
 pub struct BinaryOp {
@@ -16,9 +18,9 @@ impl BinaryOp {
     }
 }
 impl Expr for BinaryOp {
-    fn eval(&self) -> f64 {
-        let a = self.a.eval();
-        let b = self.b.eval();
+    fn eval(&self, ctx: &HashMap<String, f64>) -> f64 {
+        let a = self.a.eval(ctx);
+        let b = self.b.eval(ctx);
         match self.op.as_str() {
             "+" => a + b,
             "-" => a - b,
@@ -26,6 +28,20 @@ impl Expr for BinaryOp {
             "/" => a / b,
             _ => 0.0
         }
+    }
+}
+
+pub struct Var {
+    name: String
+}
+impl Var {
+    pub fn new(name: String) -> Var {
+        Var{ name: name }
+    }
+}
+impl Expr for Var {
+    fn eval(&self, ctx: &HashMap<String, f64>) -> f64 {
+        *ctx.get(&self.name).unwrap_or(&0.0)
     }
 }
 
@@ -38,7 +54,7 @@ impl Num {
     }
 }
 impl Expr for Num {
-    fn eval(&self) -> f64 {
+    fn eval(&self, _ctx: &HashMap<String, f64>) -> f64 {
         self.val
     }
 }
@@ -55,5 +71,5 @@ fn main() {
     let prod1 = BinaryOp::new(String::from("*"), Box::new(Num::new(3.0)), Box::new(Num::new(2.0)));
     let sum1 = BinaryOp::new(String::from("+"), Box::new(Num::new(4.0)), Box::new(prod1));
     let prod2 = BinaryOp::new(String::from("*"), Box::new(sum1), Box::new(Num::new(5.0)));
-    println!("{}", prod2.eval());
+    println!("{}", prod2.eval(&HashMap::new()));
 }

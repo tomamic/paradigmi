@@ -28,12 +28,6 @@ data BallArena = BallArena { balls :: [Ball]
 tick :: BallArena -> BallArena
 tick (BallArena balls) = BallArena (map move balls)
 
-operateArena :: BallArena -> IO ()
-operateArena a = do
-    print a
-    line <- getLine
-    when (null line) $ operateArena (tick a)
+simulate = unlines.map show.take 50.iterate tick $ BallArena [Ball 200 100 5 5, Ball 300 200 10 0]
 
-main = do
-    operateArena (BallArena [Ball 200 100 5 5, Ball 300 200 10 0])
-
+main = putStrLn simulate

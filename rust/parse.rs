@@ -2,7 +2,8 @@
 // @license This software is free - http://www.gnu.org/licenses/gpl.html
 
 mod syntree;
-use syntree::{Expr, BinaryOp, Num};
+use syntree::{Expr, BinaryOp, Num, Var};
+use std::collections::HashMap;
 
 fn find_tokens(txt: &str) -> Vec<String> {
     let mut tokens : Vec<String> = Vec::new();
@@ -105,7 +106,9 @@ fn factor(tok: &mut Tokenizer) -> Box<dyn Expr> {
         tok.consume();
         Box::new(Num::new(v))
     } else {
-        panic!("Unknown token");
+        let name = tok.peek();
+        tok.consume();
+        Box::new(Var::new(name))
     }
 }
 
@@ -117,6 +120,6 @@ fn main() {
         let mut tok = Tokenizer::new(&infix.to_string());
         let ast = expr(&mut tok);
         tok.end();
-        assert!((ast.eval() - val).abs() < f64::EPSILON, "Wrong value");
+        assert!((ast.eval(&HashMap::new()) - val).abs() < f64::EPSILON, "Wrong value");
     }
 }

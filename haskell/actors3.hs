@@ -1,5 +1,4 @@
-import System.Random
-import Control.Monad
+import Xorshift
 
 class (Show a) => Actor a where
     move :: a -> a
@@ -9,12 +8,6 @@ data Arena a = Arena { actors :: [a]
 
 tick :: (Actor a) => Arena a -> Arena a
 tick (Arena actors) = Arena (map move actors)
-
-operateArena :: (Actor a) => Arena a -> IO ()
-operateArena a = do
-    print a
-    line <- getLine
-    when (null line) $ operateArena (tick a)
 
 ----
 
@@ -28,27 +21,27 @@ data BasicActor = Ball { x :: Int
                        }
                 | Ghost { x :: Int
                         , y :: Int
-                        , rnd :: StdGen
+                        , rng :: Rng
                         } deriving (Show)
 
 moveX :: BasicActor -> BasicActor
 moveX (Ball x y dx dy)
     | 0 <= x + dx && x + dx < maxX = Ball (x + dx) y dx dy
     | otherwise                    = Ball (x - dx) y (-dx) dy
-moveX (Ghost x y rnd) = Ghost x' y rnd'
-    where (d, rnd') = randomR (-1,1) rnd
-          x' = (x + 5 * d) `mod` maxX
+moveX (Ghost x y rng) = Ghost x' y rng'
+    where (d, rng') = randint (-1,1) rng
+          x' = (x + 5 * d) %% maxX
 
 moveY :: BasicActor -> BasicActor
 moveY (Ball x y dx dy)
     | 0 <= y + dy && y + dy < maxY = Ball x (y + dy) dx dy
     | otherwise                    = Ball x (y - dy) dx (-dy)
-moveY (Ghost x y rnd) = Ghost x y' rnd'
-    where (d, rnd') = randomR (-1,1) rnd
-          y' = (y + 5 * d) `mod` maxY
+moveY (Ghost x y rng) = Ghost x y' rng'
+    where (d, rng') = randint (-1,1) rng
+          y' = (y + 5 * d) %% maxY
 
 instance Actor BasicActor where
-    move = moveX . moveY 
+    move = moveX . moveY
 
 ----
 
@@ -58,11 +51,13 @@ data Wall = Wall { wx :: Int
 
 instance Actor Wall where
     move = id    -- move w = w
-        
+
 ----
 
+simulate rng = unlines.map show.take 50.iterate tick $ Arena [Ball 200 100 5 5, Ghost 100 100 rng]
+
 main = do
-    rnd <- newStdGen
-    operateArena (Arena [Ball 200 100 5 5, Ghost 100 100 rnd])
+    rng <- getRng
+    putStrLn $ simulate rng
     -- try to add a Wall to the actors
 
